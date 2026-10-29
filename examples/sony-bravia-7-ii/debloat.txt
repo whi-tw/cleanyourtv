@@ -1,0 +1,63 @@
+# Sony BRAVIA 7 II, K-55XR75M2 (2026, device BRAVIA_AE3, product BRAVIA_AE3_EU, MediaTek "merak"), UK/EU firmware
+# Google TV 14 (API 34), build BRAVIA_AE3_EU-user 14 UKN4.250422.001 603100, security patch 2026-07-05. 4.5 GB RAM.
+# The same board and build as examples/sony-bravia-9-ii (BRAVIA_AE3_PA), and the same packages.
+#
+# Apply:   TV_HOST=<tv ip> TVINPUT_ALLOW=1 tools/disable.sh examples/sony-bravia-7-ii/debloat.txt
+# Undo:    TV_HOST=<tv ip> tools/restore.sh examples/sony-bravia-7-ii/debloat.txt com.google.android.apps.tv.launcherx
+#          (restore.sh defaults to tvlauncher, which this TV does not have: pass launcherx)
+# Everything is DISABLED, not uninstalled. Comment out any line you want to keep.
+#
+# Applied in small batches on 2026-10-29 with a screenshot and a crash-log check after each, then the launcher
+# installed. Reboot-checked: the disabled list was identical afterwards, Home stayed on the launcher and the TV
+# boots to it. Home, the Input key, HDMI and the voice button were pressed on the real remote.
+# Lived with since 2026-10-29. If something breaks, re-enable it with `pm enable <package>` and please report it.
+#
+# Connecting: Wireless debugging (Developer options; Settings > System > About > "Android TV OS build" until it
+# says you are a developer), paired once with the stock adb (`adb pair <ip>:<pairing port> <code>`). With the
+# encrypted connection, run the tools with TV_ADB_BINARY=$(which adb) and TV_HOST=<ip>:<port> (tools/native-adb.md);
+# the port changes at every restart. `adb tcpip 5555` also works, for the plain client.
+#
+# Stock launcher: com.google.android.apps.tv.launcherx. com.google.android.tungsten.setupwraith also claims HOME
+# (priority 1), so it is in this list. Both are off only after the new launcher is Home.
+# Keep: com.mediatek.*, com.sony.dtv.tvinput.*, com.sony.dtv.tvlin (Live TV, hide it in the launcher with
+# hidden_apps / live_tv_package), braviasync*, sonysystemservice, settingsprovider, imeproxy, irblaster, all
+# Google TV system and Play packages.
+# Kept by the owner's choice: Sony firmware updates, AirPlay (com.sony.dtv.airplayapp), voice / Gemini
+# (katniss, assistantadapter, voicesearch).
+#
+# Checked on this TV:
+# - com.qterics.da.product: tools/disable.sh skips it (the input-driver check: dumpsys shows no permission
+#   block for it) until TVINPUT_ALLOW=1. Disabled after HDMI was confirmed working on the real
+#   remote; HDMI, the Input key and Live TV kept working.
+# - setupwraith: the saved Wi-Fi networks belonged to android.uid.system (`dumpsys wifi | grep -o 'cname=[^ ]*'`),
+#   so disabling it did not take the TV off Wi-Fi. Check yours first: if the owner is setupwraith, Android deletes
+#   the network when it is disabled.
+# - The remote's app buttons (YouTube, Netflix, Prime Video, Disney+, Crunchyroll, Sony Pictures Core), STAR and
+#   Settings stop working with launcherx off; see README.md in this folder for the scancodes.
+# - The Ambient screensaver (Google Backdrop) still runs, but pressing Down on it shows an "unable to load
+#   content" toast: its panel loads through launcherx. The launcher's Clock works as a screensaver.
+
+# tracking, ACR and telemetry
+tv.samba.ssm                                   # Samba TV, fingerprints what is on screen
+tv.samba.ssm.ui                                # Samba TV opt-in / privacy screens
+com.qterics.da.product                         # Qterics device agent (needs TVINPUT_ALLOW=1, see above)
+com.sony.dtv.da.service                        # Sony device agent
+com.sonyericsson.idd.agent                     # Sony IDD usage-data agent
+com.google.android.feedback
+
+# Sony promos and content feeds
+com.sony.dtv.promos                            # My BRAVIA promos (already off on this TV before the clean-up)
+com.sony.dtv.sonyselect                        # Sony Select app promos
+com.sony.dtv.sonytab                           # Sony tab on the stock home (already off on this TV before)
+
+# Retail demo
+com.sony.dtv.demosupport
+com.sony.dtv.demosystemsupport
+com.sony.dtv.multiscreendemo
+
+# Optional feature, off by the owner's choice
+com.google.android.apps.mediashell             # Chromecast built-in
+
+# Needed for a custom launcher on Google TV: the setup wizard grabs Home once launcherx is disabled.
+# Re-enable it (restore.sh does) before a factory reset. See the Wi-Fi note above.
+com.google.android.tungsten.setupwraith

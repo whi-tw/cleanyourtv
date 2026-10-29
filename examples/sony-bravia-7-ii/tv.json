@@ -1,0 +1,6 @@
+{
+  "tv": "Sony BRAVIA 7 II (K-55XR75M2, BRAVIA_AE3, MediaTek merak)",
+  "os": "Google TV 14",
+  "brand": "Sony",
+  "notes": "Same board and build as the 9 II list: Samba TV ACR, Sony/Qterics device agents, IDD, My BRAVIA promos, Sony Select and Sony tab, demo mode; setupwraith off for the launcher (its saved Wi-Fi belonged to the system, not setupwraith); Chromecast off by choice; Settings and app buttons by scancode with InputKeyService; voice, AirPlay and firmware updates kept"
+}
